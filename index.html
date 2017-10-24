@@ -1,0 +1,1054 @@
+<HTML>
+<HEAD>
+   
+<TITLE>PJA Toolkit</TITLE>
+<META  name="description" content="PJA Toolkit">
+<META  name="keywords" content="">
+<META  name="copyright" content="(C) 2000 Emmanuel PUYBARET - eTeks">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+
+<P><CENTER>
+    
+  <p><A HREF="http://www.eteks.com"><IMG
+SRC="images/logoeteks.gif" ALT="eTeks" WIDTH=133 HEIGHT=36
+X-SAS-UseImageWidth X-SAS-UseImageHeight BORDER=0></A> </p>
+    </CENTER>
+<h1 align="center">PJA Toolkit</h1>
+<hr>
+<p align="center"><a href="#What">What is PJA Toolkit ?</a><br>
+ <a href="#Download"> PJA Toolkit contents</a><a href="#Test"><br>
+ Tested platforms</a><br>
+ <a href="#FAQ">FAQ </a><br>
+ <a href="#History">History</a><a href="#Next"><br>
+ What's next ?</a><br>
+ <a href="#Copyright">Copyright and license</a></p>
+<p align="center"><a href="doc/index.html">PJA Toolkit documentation</a><br>
+<a href="http://www.eteks.com/pja/en/feedback.html">PJA Toolkit feedback</a><br>
+<a href="http://www.eteks.com/pja/en/forum/">PJA Toolkit Forum (online)</a><br>
+</p>
+<hr>
+<h3><a name="What"></a>What is PJA Toolkit ? </h3>
+<blockquote> 
+ <p>PJA (Pure Java AWT) Toolkit is a Java<sup><font
+size="-1">TM</font></sup> library for drawing graphics developed by eTeks. It is <a href="#FAQPureJava">100% Pure Java</a> and doesn't use any native graphics 
+  resource of the system on which the Java Virtual Machine runs.<br>
+  <tt>java.awt.Graphics</tt> methods such as <tt>drawLine ()</tt>, <tt>fillOval ()</tt>, <tt>drawString</tt> 
+  (),... are implemented in the default JVM with native graphical functions (except in some cases for Java2D) : That means that <tt>drawLine ()</tt> finally 
+  calls a GDI system function on Windows or X11 function on a X11/UNIX machine even if the drawing is done in an off-screen image using the class <tt>java.awt.Image</tt>. 
+  This ensures the best performance for drawing graphics with Java.<br>
+  But in a few cases, this default behavior can cause problems that PJA Toolkit
+  library improves :</p>
+</blockquote>
+<ul>
+ <li>When no X11 Display is available on a UNIX machine (also called headless environment) or when GDI resources are low on Windows, it is impossible to 
+  compute off-screen images with <tt>java.awt.Graphics</tt> methods under a JDK version &lt; 1.4, even if your program doesn't need to display these images. 
+  Typically, this situation happens for servlets returning dynamically generated images like pies, charts or web counters.<br>
+ </li>
+ <li>With PJA Toolkit, you don't need to change your Java programs that you expected
+   to run : setting <tt>java.awt</tt> system property to <tt>com.eteks.awt.PJAToolkit</tt> 
+  is the only required <a href="#FAQuse">modification</a> to your program with Java 1.1 (see the <a href="#FAQ">FAQ</a> and <tt>com.eteks.awt.PJAToolkit</tt> 
+  class <a href="doc/com/eteks/awt/PJAToolkit.html">documentation</a> for more information).</li>
+ <li>It is also impossible to compute off-screen images when the Java security manager forbids access to any Toolkit or the AWT library. In that case you 
+  can although create an instance of <tt>com.eteks.awt.PJAImage</tt> class which extends <tt>java.awt.Image</tt>, and draw into it with graphics methods.</li>
+ <li> Drawing with native function doesn't give always the exact same results for each pixel on all platforms. For example, <i>SansSerif</i> font renders 
+  differently on MacOS, Windows and other systems : each letter of this font isn't drawn the same, and is different if font anti-aliasing is set or not 
+  on the system. On MacOS, circles aren't rendered as specified in Java documentation : <tt>fillArc ()</tt> and <tt>drawArc ()</tt> don't use the same base 
+  ellipse... 
+  <p>Finally, PJA Toolkit library is supplied under GNU General Public License
+    with its Java source files, and is a good exemple for studying :</p>
+ </li>
+ <li>How pixels are drawn by graphics functions on a computer (<tt>com.eteks.awt.PJAGraphics</tt> uses <i>Bresenham</i> algorithms to draw lines and circles).</li>
+ <li>How to use the Java paradigm for managing images specified by the <tt>ImageConsumer</tt>/<tt>ImageProducer</tt>/<tt>ImageObserver</tt> interfaces.</li>
+ <li>How Java Toolkit works and what it needs to work (which <tt>abstract</tt> classes and interfaces to implement). 
+  <p>Sources are supplied to allow developers to improve and optimize the graphic drawing methods.<br>
+   <tt>com.eteks.awt</tt> package files are Java 1.0 to Java 1.4.2 compliant.</p>
+  <p>PJA Toolkit library core classes weighs 140 Ko at run-time (can be reduced
+    to 73 Ko if compressed).<br>
+  </p>
+ </li>
+</ul>
+<h3><a name="Download"></a> PJA Toolkit contents</h3>
+<blockquote> 
+  <p>PJA Toolkit library is supplied with :</p>
+  <ul>
+    <li><tt>pja.jar</tt> and <tt>pjatools.jar</tt> JAR libraries.</li>
+    <li>Java source files.</li>
+    <li>Javadoc documentation.</li>
+    <li>a <a href="#FAQ">FAQ</a> list.</li>
+    <li><i>PJANativeToolkitComparison</i> a demo to compare at screen the rendering
+       of the PJA Toolkit and the native toolkit of your system. A speed meter
+      
+      allows to see the average duration of drawing with PJA Toolkit compared
+       to native toolkit.</li>
+    <li><i>PJAToolkitDemo</i> a demo that creates GIF files using the PJA Toolkit.</li>
+    <li><i>NativeToolkitDemo</i> a demo that creates GIF files using the native 
+      toolkit of your system.</li>
+    <li><i>PJADemo</i> a demo that creates GIF files using PJA Toolkit and a
+      restrictive 
+      <tt>SecurityManager</tt> that prevents the use of awt library.</li>
+    <li><i>PJAFontCapture</i> a Font capture utility to generate font files (to 
+      avoid copyright problems on fonts, no font is provided). You can use any 
+      machine where AWT works to generate these portable files.</li>
+    <li><i>TeksSurveyPie</i> an exemple of a servlet generating a survey pie.</li>
+  </ul>
+  <p>Servlet host providers can use it for their customers, if they provide copyright 
+    information and a link to <a href="http://www.eteks.com">http://www.eteks.com</a> 
+    on their web site and other documentation.<br>
+  </p>
+</blockquote>
+<h3><a name="Test"></a>Tested platforms</h3>
+<blockquote> 
+ <p>eTeks made successful tests of PJA Toolkit on the following systems :</p>
+ <table border="1" cellpadding="3">
+ <tr> 
+ <td> 
+ <center>
+  <b>JDK version</b> 
+ </center>
+ </td>
+ <td> 
+ <center>
+  <b> Windows </b> 
+ </center>
+ </td>
+ <td> 
+ <center>
+  <b> MacOS </b> 
+ </center>
+ </td>
+ <td> 
+ <center>
+  <b> UNIX </b> 
+ </center>
+ </td>
+ </tr>
+ <tr> 
+ <td> 
+ <center>
+  <b>1.0</b> 
+ </center>
+ </td>
+ <td>Win 98/SunJDK 1.0.2</td>
+ <td>&nbsp;</td>
+ <td>&nbsp;</td>
+ </tr>
+ <tr> 
+ <td> 
+ <center>
+  <b>1.1</b> 
+ </center>
+ </td>
+ <td>Win 98/SunJDK 1.1.8</td>
+ <td>MacOS 9/MRJ 2.2</td>
+ <td> 
+ <p>Linux/JDK 1.1.7 (without DISPLAY)</p>
+ </td>
+ </tr>
+ <tr> 
+ <td> 
+ <center>
+  <b>1.2</b> 
+ </center>
+ </td>
+ <td>Win 98/SunJDK 1.2.2</td>
+ <td>&nbsp;</td>
+ <td> 
+ <p>Linux/JDK 1.2.2 (with and without DISPLAY)</p>
+ </td>
+ </tr>
+ <tr>
+   <td>
+     <center>
+       <b>1.3</b>
+     </center>
+   </td>
+   <td>Win 98/SunJDK 1.3.0</td>
+   <td>&nbsp;</td>
+   <td>Linux/JDK 1.3.1 (with and without DISPLAY)</td>
+ </tr>
+ <tr>
+   <td>
+     <center>
+       <b>1.4</b>
+     </center>
+   </td>
+   <td>Win XP/SunJDK 1.4.2</td>
+   <td>MacOS X/JDK 1.4.2</td>
+   <td>Linux/JDK 1.4.2 (with and without DISPLAY)</td>
+ </tr>
+ </table>
+ <p>Other users reported they succeeded to use PJA Toolkit on the following systems
+  :</p>
+  <ul>
+    <li>AIX with JDK 1.3.0</li>
+    <li>Sun Solaris</li>
+    <li>AS400</li>
+    <li>OS/390</li>
+    <li>HP-UX with JDK 1.2.2 and JDK <b>1.3.1.02</b></li>
+    <li>FreeBSD with JDK 1.3</li>
+  </ul>
+</blockquote>
+<h3><a name="FAQ"></a>FAQ</h3>
+<blockquote> 
+ <p><i><a name="FAQuse"></a>In which cases should I use PJA Toolkit ?</i></p>
+</blockquote>
+
+
+<blockquote>
+  <p></p>
+  <blockquote> 
+    <table cellpadding="3" border="1">
+    <tr> 
+    <td> 
+    <center>
+     <b> Audience </b> 
+    </center>
+    </td>
+    <td> 
+    <center>
+     <b>Problem</b> 
+    </center>
+    </td>
+    <td colspan="2"> 
+    <center>
+     <b>Solution</b> 
+    </center>
+    </td>
+    </tr>
+    <tr> 
+    <td> 
+    <center>
+     User / Developer 
+    </center>
+    </td>
+    <td>You wonder if graphics servlets and applications can work on your server.</td>
+    <td colspan="2">Test <tt><a href="doc/com/eteks/servlet/DefaultToolkitTest.html">com.eteks.servlet.DefaultToolkitTest</a></tt> servlet and/or <tt>PJAToolkitDemo</tt> 
+    application.</td>
+    </tr>
+    <tr> 
+    <td rowspan="2"> 
+    <center>
+     User 
+    </center>
+    </td>
+    <td rowspan="2">You have problems to run graphics servlets on your server.</td>
+    <td> 
+    <p>You can't change <i>java</i> command line options.</p>
+    </td>
+    <td> 
+    <p>Test <tt><a href="doc/com/eteks/servlet/PJAServletTest.html">com.eteks.servlet.PJAServletTest</a></tt>.<br>
+     If it works fine use <br>
+     <tt><a href="doc/com/eteks/awt/servlet/PJARedirectServlet.html">com.eteks.awt.servlet.PJARedirectServlet</a></tt> to run graphics servlets.<br>
+     Otherwise, ask your servlet server administrator to add <a href="#FAQoptions">these options</a> to java command line (at least <tt>-Xbootclasspath/a:pja.jar</tt>)</p>
+    </td>
+    </tr>
+    <tr> 
+    <td>You can change <i>java</i> command line options.</td>
+    <td>See <a href="#FAQoptions">which options to use</a>.</td>
+    </tr>
+    <tr> 
+    <td> 
+    <center>
+     Developer 
+    </center>
+    </td>
+    <td>You want to develop graphics servlets that will work on most servers.</td>
+    <td colspan="2">
+      <p>On a Windows server you may use whatever classes you want. On a UNIX
+        server, this depends on the X11 libs installed on the machine and on
+        the  Java version you target&nbsp;:</p>
+      <ol>
+            <li>If your target server has  a <b>running X11 DISPLAY</b>              like <i>xvfb</i> (X Virtual Frame Buffer) on it (or
+        on        another machine), you'll be able to create off-screen images
+              using any AWT class, after setting the DISPLAY environment variable
+              equal to
+                the
+            address of the X11 server. </li>
+            <li> If your target server has the <b>basic X11 libs installed</b> with
+                  no access to a running X11 DISPLAY <b>and</b>  you can change <i>java</i> command
+                  line options, you'll be able to create off-screen
+                  images using any AWT class&nbsp;:
+                  <ul>
+                  <li> With Java 1.3 or an earlier version, you can do this if
+                        you configure your JVM with <a href="#FAQoptions">java command
+                        line options</a> to use PJA Toolkit instead of the default
+                    Java toolkit. </li>
+                  <li> From Java 1.4, you can do this if you set the <tt>java.awt.headless</tt> <tt>System</tt>                    property
+                    to <tt>true</tt>. If the headless property doesn't resolve
+                    your problem, use PJA Toolkit instead of the default
+                    Java toolkit with the matching <a href="#FAQoptions">java
+                    command line options</a>.</li>
+                </ul>
+            </li>
+            <li>If your target server has the <b>basic X11 libs installed</b> with
+                  no access to a running X11 DISPLAY <b>but</b> you can't change <i>java</i> command
+                  line options, you'll  be able to create off-screen images but
+                  the available features will depend on the JDK version&nbsp;:
+                  <ul>
+                <li> With Java 1.1 or an earlier version, you can use any AWT
+                  feature that don't require a call to <tt>Toolkit.getDefaultToolkit()</tt> like
+                  the instantiation of a <tt>java.awt.Font</tt> object.</li>
+                <li> With Java 1.2 and 1.3, it's the same as Java 1.1 and you
+                  can't use any Java2D feature.</li>
+                <li> From Java 1.4, you can use any AWT class once you run
+                  in your servlet the instruction <tt>System.setProperty&nbsp;(&quot;java.awt.headless</tt>&quot;,
+                  &quot;<tt>true</tt>&quot;);.</li>
+              </ul>
+            </li>
+            <li>If your target server has <b>no X11 libs installed</b> at all <b>or</b> if
+              the security manager forbids the access to the <tt>awt</tt> library,
+              you'll be able to create off-screen images but the available features
+              will
+              depend
+              on the JDK version&nbsp;:
+              <ul>
+                <li>With Java 1.1 or an earlier version, you can use any AWT
+                  feature that don't require a call to <tt>Toolkit.getDefaultToolkit()</tt> like
+                    the instantiation of a <tt>java.awt.Font</tt> object (same
+                    situation as if basic X11 libs are installed).</li>
+                <li> From Java 1.2, you 
+                        won't be able to use any Java2D feature and  any
+                        of the following AWT classes (these classes require X11
+                libs to be installed)&nbsp;:
+                <ul>
+                  <li><tt>java.awt.Toolkit</tt></li>
+                  <li><tt>j</tt><tt>ava.awt.Color</tt></li>
+                  <li><tt>java.awt.Rectangle</tt></li>
+                  <li><tt>java.awt.Font</tt></li>
+                  <li><tt>java.awt.FontMetrics</tt> </li>
+                  <li><tt>java.awt.image.ColorModel</tt></li>
+                  <li><tt>java.awt.image.BufferedImage</tt></li>
+                </ul>
+              </ul>
+          </ol>
+      <p>If you target the worst configuration (a UNIX server with no X11 libs
+        and a JDK &gt;= 1.2), you may still  create off-screen images with 
+          AWT features of
+        Java 1.1 at your disposal in PJA Toolkit (sorry no Java2D&nbsp;at this
+        time !),
+        thanks to the <tt><a href="doc/com/eteks/awt/PJAImage.html">com.eteks.awt.PJAImage</a></tt> and <tt><a href="doc/com/eteks/awt/PJAImage.html">com.eteks.awt.PJAGraphics</a></tt> classes.
+        As these two classes extends <tt>java.awt.Image</tt> and <tt>java.awt.Graphics</tt> classes,
+          I shouldn't be too difficult to use them. <tt><a href="doc/com/eteks/awt/PJAImage.html">PJAGraphics</a></tt> has
+                                some <a href="#FAQServletProblem">additional
+                                methods</a> that
+                                allow you to change the current color and font
+                                without using the <tt>java.awt.Color</tt> and <tt>java.awt.Font</tt> classes. </p>
+      </td>
+    </tr>
+    </table>
+    <p>&nbsp;</p>
+  </blockquote>
+  <p><i><a name="FAQoptions"></a>What options do I have to add to java command
+  line to use PJA Toolkit with my servlet server on UNIX platform ?</i></p>
+  <blockquote> 
+    <p><i>(JDK version is obtained with the command java -version)</i></p>
+  </blockquote>
+  <ul>
+    <li>JDK version &lt;= 1.1 : The demo closest to this situation is <tt>PJAToolkitDemo.sh</tt>. It requires at least one <i>.pjaf</i> font file to run. 
+     <ul>
+      <li> First, run <i>PJAFontCapture</i> on a platform with a working Display (Windows, MacOS, UNIX with X11 Display) to create at least one <i>.pjaf</i> 
+       font file.</li>
+      <li>Copy or ftp (in binary mode) <i>.pjaf</i> files to PJA Toolkit install
+        directory.</li>
+      <li>Check <tt>classpath</tt> in <tt>PJAToolkitDemo.sh</tt>.</li>
+      <li>Run <tt>PJAToolkitDemo.sh</tt> : It tests most of the Graphics methods and creates 4 GIF files (<tt>PJAToolkit*.gif</tt>). Check if the images looks 
+       like <a href="images/drawers.gif">this</a>.</li>
+      <li>Finally, add these options to your Java command line : 
+       <ul>
+        <li> <tt><b>-classpath $CLASSPATH:pja.jar</b></tt> (or change <tt>CLASSPATH</tt> variable).</li>
+        <li><b><tt>-Dawt.toolkit=com.eteks.awt.PJAToolkit</tt></b> : this enables to change AWT Toolkit.</li>
+        <li><b><tt>-Djava.awt.fonts=.</tt></b> or the path where you'll put your <i>.pjaf</i> files.</li>
+       </ul>
+      </li>
+     </ul>
+    </li>
+    <li> JDK version &gt;= 1.2 : The demo closest to this situation is <tt>PJAToolkitDemo1.2.sh</tt>. It uses Lucida True Type fonts delivered with the JDK. 
+     <ul>
+      <li>First check the parameters in <tt>PJAToolkitDemo1.2.sh</tt> : 
+       <ul>
+        <li><tt>java.awt.fonts</tt> property must be equal to the directory where <tt>Lucida*.ttf</tt> files can be found. Normaly it looks like <tt>/.../jdk.../jre/lib/fonts</tt> 
+         depending on the directory where the JDK is installed.</li>
+        <li><tt>user.home</tt> property must be equal to PJA Toolkit install
+          directory.</li>
+       </ul>
+      </li>
+      <li>Run <tt>PJAToolkitDemo1.2.sh</tt> : It tests most of the Graphics methods
+        and creates 4 GIF files (<tt>PJAToolkit*.gif</tt>). Check if the images
+         looks like <a href="images/drawers.gif">this</a> and use some anti-aliasing.
+        If the JVM crashes try this <a href="#FAQJVMCrash">addtionnal change</a>.</li>
+      <li>Finally, add these options to your Java command line : 
+       <ul>
+        <li> <tt><b>-Xbootclasspath/a:pja.jar</b></tt> (changing <tt>classpath</tt> <b>is
+            not</b> enough).</li>
+        <li><tt><b>-Dawt.toolkit=com.eteks.awt.PJAToolkit</b></tt> : this enables to change AWT Toolkit.</li>
+        <li><tt> <b>-Djava.awt.graphicsenv=com.eteks.java2d.PJAGraphicsEnvironment</b></tt> : this enables to change Graphics environment.</li>
+        <li><tt><b>-Djava2d.font.usePlatformFont=false</b></tt> : this avoids the class <tt>sun.java2d.loops.RasterOutputManager</tt> to call the native method 
+         <tt>getPlatformFontVar ()</tt>, that may cause a JVM crash.</li>
+        <li><tt><b>-Djava.awt.fonts=path</b></tt> with <tt>path</tt> equal to
+          the directory where <tt>Lucida*.ttf</tt> files can be found. You can
+          add to 
+         <tt>path</tt> other directories containing True Type Fonts  using <tt>:</tt> separator.</li>
+        <li>Either <tt><b>-Duser.home=dir</b></tt> with <tt>dir </tt>equal to the directory where a sub directory <tt>lib</tt> containing
+          PJA Toolkit <tt><a href="lib/font.properties">font.properties</a></tt> 
+         file can be found, or add <tt>lib/font.properties</tt> to <tt>user.home</tt> system property directory, or replace Java <tt>font.properties</tt> 
+         file by PJA Toolkit <tt>font.properties</tt> file (it can be found in <tt>/.../jdk.../jre/lib</tt> directory).<br>
+         Some JDK configuration (depending on your country or the type of your OS) may require you to rename the <tt>font.properties</tt> file or change the 
+         content of this file : have a look at the document <a href="http://www.javasoft.com/products/jdk/1.2/docs/guide/internat/fontprop.html">Adding Fonts 
+         to the Java Runtime</a> for more information. Note that fonts must be coded as required for Win32 platform and only True Type fonts can be used.<br>
+         As the JDK doesn't provide any <i>ZapfDingbats</i> and <i>Symbol</i> fonts,
+         you may need to add yourself these fonts to <tt>font.properties</tt>.</li>
+       </ul>
+      </li>
+     </ul>
+    </li>
+  </ul>
+  <blockquote> 
+    <p>For your information, the JDK version &gt;= 1.4 includes its own headless
+      system (see <a href="http://java.sun.com/j2se/1.4/docs/guide/awt/AWTChanges.html#headless">AWT
+       Enhancements</a> in JDK 1.4 docs) : Try first to set the system property <tt>java.awt.headless</tt> to <tt>true</tt> or
+       add the <b><tt>-Djava.awt.headless=true</tt></b> 
+     option to your Java command line to use it. If it doesn't work, then try
+    PJA Toolkit with the options described in the previous paragraph.</p>
+  </blockquote>
+  <p><i>How can I add <tt>pja.jar</tt> to </i><tt><i>bootclasspath</i></tt><i> in JServ with JDK version &gt;= 1.2 ?</i></p>
+  <blockquote> 
+    <p>Add the following line in the <tt>jserv.properties</tt> file with the good <tt>path</tt> to <tt>pja.jar</tt> : </p>
+    <blockquote> 
+     <pre>wrapper.bin.parameters=-Xbootclasspath/a:/path/pja.jar</pre>
+    </blockquote>
+  </blockquote>
+  <p><i>Why do I still get the exception <tt>java.awt.AWTError : Toolkit not Found</tt> in a <tt>java.awt.Toolkit.getDefaultToolkit ()</tt> call, as I can 
+  instantiate the class <tt>com.eteks.awt.PJAToolkit</tt> ?</i></p>
+  <blockquote> 
+    <p><tt>getDefaultToolkit</tt> <tt>()</tt> tries to instantiate the class described by the system property <tt>awt.toolkit</tt>. This method uses the system 
+     classpath of the default class loader to find this toolkit class. If <tt>com.eteks.awt.PJAToolkit</tt> is in a user or servlet classpath, your program 
+     may be able to instantiate this class but <tt>getDefaultToolkit</tt> <tt>()</tt> won't still be able to find it.<br>
+     That's why <tt>pja.jar</tt> <b>must</b> be in the <a href="#FAQoptions">options</a> <tt>-classpath</tt> (JDK &lt;= 1.1) or <tt> -Xbootclasspath</tt> 
+     (JDK &gt;= 1.2) of the java command line. If you don't have access to the command line, see the parts <i><a href="#FAQuse">In
+    which cases should I use PJA Toolkit ?</a></i> and <i><a href="#FAQServletProblem">What methods can be called in a servlet with no problem of Toolkit access for end users ?</a></i></p>
+    <p></p>
+  </blockquote>
+  <p><i><a name="FAQJVMCrash"></a>Why the Java Virtual Machine crashes when I use fonts on UNIX platform ?</i></p>
+  <blockquote> 
+    <p>With some implementations of JDK &gt;= 1.2 (particulary on Solaris), <tt>sun.java2d.SunGraphicsEnvironment</tt> class uses the method <tt>private static 
+     native boolean validPropertiesFile (java.lang.String, java.lang.String)</tt>. This <tt>static</tt> method must have a bug which makes the JVM crashes 
+    when it's called without a correct Display. The following ugly patch works : </p>
+    <ul>
+     <li>Extract the latest file <tt>sun/java2d/SunGraphicsEnvironment.class</tt> from the file <tt>rt.jar</tt> of the matching JDK (1.2 or 1.3) for <b>Windows</b> 
+      distributed by Sun (it doesn't use the <tt>validPropertiesFile</tt> method), with the command :<br>
+      <tt>jar xvf /.../jdk.../jre/lib/rt.jar sun/java2d/SunGraphicsEnvironment.class</tt></li>
+     <li>Put the file <tt>sun/java2d/SunGraphicsEnvironment.class</tt> in a new jar archive named <tt>rtgraphics.jar</tt> with the command :<br>
+      <tt>jar cvf rtgraphics.jar sun/java2d/SunGraphicsEnvironment.class</tt></li>
+     <li>Change the option <tt>-Xbootclasspath</tt> of your Java command line to <tt><b>-Xbootclasspath/p:pja.jar:rtgraphics.jar</b></tt> (<tt>rtgraphics.jar</tt> 
+      must be prepending to default bootclasspath to ensure JVM uses the <tt>sun.java2d.SunGraphicsEnvironment</tt> class of <tt>rtgraphics.jar</tt>).</li>
+    </ul>
+    <p>Some users reported that inner classes of <tt>sun.java2d.SunGraphicsEnvironment</tt> (all the files named <tt>SunGraphicsEnvironment$*.class</tt>) 
+     must be included also in <tt>rtgraphics.jar</tt> to make this patch work (this depends on the JDK version).<br>
+    This bug doesn't appear with the latest version of the JDK 1.3.</p>
+  </blockquote>
+  <p><i><a name="FAQServletProblem"></a>What methods can be called in a servlet with no problem of Toolkit access for end users ?</i></p>
+  <blockquote> 
+    <p>Problems with graphics servlet may occure because users can't access to AWT default toolkit on UNIX platform where no Display is available. In this 
+     case, the classes <tt>java.awt.Toolkit</tt> and <tt>java.awt.Font</tt> can't be instantiated and the methods of <tt>java.awt.Component</tt> requiring 
+     a Toolkit instance can't be called.<br>
+     Providing PJA Toolkit to these users instead of default toolkit may be a good solution, except if they can't modify themselves the <a href="#FAQoptions">options</a> 
+    of their Java Virtual Machine because they are not the servlet server administrator :</p>
+    <ul>
+     <li>System properties can be replaced in the servlet by a call to <tt>System.setProperties ()</tt> or <tt>System.setProperty ()</tt>. For example, <tt>System.setProperty 
+      ("awt.toolkit", "com.eteks.awt.PJAToolkit") </tt> can be called to replace the <tt>-Dawt.toolkit=com.eteks.awt.PJAToolkit</tt> option.</li>
+     <li> <tt>-classpath $CLASSPATH:pja.jar</tt> (or <tt>-Xbootclasspath/a:pja.jar)</tt> can't
+       be replaced easily. Some servlet servers (like JServ, JRun or Tomcat)
+       provide the ability for each user to specify a different classpath to
+       which you
+       can
+       add <tt>pja.jar</tt>. This classpath will be used by the Servlet 
+      server class loader to load user servlets and its depending classes.<br>
+      But AWT toolkit is instantiated by the method <tt>getDefaultToolkit ()</tt> of the class <tt>java.awt.Toolkit</tt> : this method uses <tt>awt.toolkit</tt> 
+      property to guess which class must be instantiated. Generally, system default class loader will be used to load <tt>java.awt.Toolkit</tt> and this class. 
+      As system class loader will use system classpath to load <tt>com.eteks.awt.PJAToolkit</tt> class, it won't find it because <tt>pja.jar</tt> is in servlet 
+      classpath and not in system classpath !</li>
+    </ul>
+    <p>The class <tt><a href="doc/com/eteks/awt/servlet/PJAServlet.html">com.eteks.awt.servlet.PJAServlet</a></tt> was
+      an attempt to the problem of the classpath option, but may cause some security
+      problems on java environment running with strong security manager : this
+      class requires
+      the access to classpath and other 
+     system properties, the ability to instantiate a class loader, and in the
+      fact it doesn't work that much...<br>
+     PJA Toolkit provides also a way to perform graphics even if no default toolkit
+     was instantiated and if no X11 libs are installed. Here's the list of the
+     methods
+     you can call without using an AWT Toolkit instantiated by a <tt>java.awt.Toolkit.getDefaultToolkit
+     ()</tt> call :</p>
+    <table border="1" cellpadding="3" width="95%">
+    <tr valign="top"> 
+    <td colspan="2"> 
+    <center>
+     <b>Default AWT toolkit</b> 
+    </center>
+    </td>
+    <td rowspan="15" valign="top" bgcolor="#CCCCCC">&nbsp;</td>
+    <td valign="top" colspan="2"> 
+    <center>
+     <b>PJA Toolkit</b> (package <tt>com.eteks.awt</tt>) 
+    </center>
+    </td>
+    </tr>
+    <tr valign="top"> 
+    <td><tt>Toolkit</tt></td>
+    <td><tt> getImage (URL url)</tt></td>
+    <td valign="top"><tt><a href="doc/com/eteks/awt/PJAGraphicsManager.html">PJAGraphicsManager</a></tt></td>
+    <td valign="top"><tt>getImage (URL url)</tt></td>
+    </tr>
+    <tr valign="top"> 
+    <td><tt>Toolkit</tt></td>
+    <td><tt>getImage (String file)</tt></td>
+    <td valign="top"><tt><a href="doc/com/eteks/awt/PJAGraphicsManager.html">PJAGraphicsManager</a></tt></td>
+    <td valign="top"><tt>getImage (String file)</tt></td>
+    </tr>
+    <tr valign="top"> 
+    <td><tt>Toolkit</tt></td>
+    <td><tt>createImage (ImageProducer producer)</tt></td>
+    <td valign="top"><tt><a href="doc/com/eteks/awt/PJAGraphicsManager.html">PJAGraphicsManager</a></tt></td>
+    <td valign="top"><tt>createImage (ImageProducer producer)</tt></td>
+    </tr>
+    <tr valign="top"> 
+    <td><tt>Toolkit</tt></td>
+    <td><tt>createImage (byte[] imagedata, int imageoffset, int imagelength)</tt></td>
+    <td valign="top"><tt><a href="doc/com/eteks/awt/PJAGraphicsManager.html">PJAGraphicsManager</a></tt></td>
+    <td valign="top"><tt>createImage (byte[] imagedata, int imageoffset, int imagelength)</tt></td>
+    </tr>
+    <tr valign="top"> 
+    <td><tt>Toolkit</tt></td>
+    <td><tt>prepareImage (Image image, int width, int height, ImageObserver observer)</tt></td>
+    <td valign="top"><tt><a href="doc/com/eteks/awt/PJAGraphicsManager.html">PJAGraphicsManager</a></tt></td>
+    <td valign="top"><tt>prepareImage (Image image, int width, int height, ImageObserver observer)</tt></td>
+    </tr>
+    <tr valign="top"> 
+    <td><tt>Toolkit</tt></td>
+    <td><tt>checkImage (Image image, int width, int height, ImageObserver observer)</tt></td>
+    <td valign="top"><tt><a href="doc/com/eteks/awt/PJAGraphicsManager.html">PJAGraphicsManager</a></tt></td>
+    <td valign="top"><tt>checkImage (Image image, int width, int height, ImageObserver observer)</tt></td>
+    </tr>
+    <tr valign="top"> 
+    <td><tt>Toolkit</tt></td>
+    <td><tt>getColorModel ()</tt></td>
+    <td valign="top"><tt><a href="doc/com/eteks/awt/PJAGraphicsManager.html">PJAGraphicsManager</a></tt></td>
+    <td valign="top"><tt>getColorModel ()</tt></td>
+    </tr>
+    <tr valign="top"> 
+    <td><tt>Component</tt></td>
+    <td><tt>createImage (int width, int height)</tt></td>
+    <td>&nbsp;</td>
+    <td><tt>new PJAImage (int width, int height)</tt></td>
+    </tr>
+    <tr valign="top"> 
+    <td><tt>Component</tt></td>
+    <td><tt>createImage (ImageProducer producer)</tt></td>
+    <td><tt><a href="doc/com/eteks/awt/PJAGraphicsManager.html">PJAGraphicsManager</a></tt></td>
+    <td><tt>createImage (ImageProducer producer)</tt></td>
+    </tr>
+    <tr valign="top"> 
+    <td><tt>Graphics</tt></td>
+    <td> 
+    <p><tt>getFont ()</tt></p>
+    </td>
+    <td><tt><a href="doc/com/eteks/awt/PJAGraphicsExtension.html">PJAGraphicsExtension</a></tt></td>
+    <td> 
+    <p><tt>getFontName ()<br>
+     getFontStyle ()<br>
+     getFontSize () </tt></p>
+    </td>
+    </tr>
+    <tr valign="top"> 
+    <td><tt>Graphics</tt></td>
+    <td> 
+    <p><tt>setFont (Font font)</tt></p>
+    </td>
+    <td><tt><a href="doc/com/eteks/awt/PJAGraphicsExtension.html">PJAGraphicsExtension</a></tt></td>
+    <td> 
+    <p><tt>setFont (String fontName, int fontStyle, int fontSize) </tt></p>
+    </td>
+    </tr>
+    <tr valign="top">
+      <td><tt>Graphics</tt></td>
+      <td><tt>getColor ()</tt></td>
+      <td><tt><a href="doc/com/eteks/awt/PJAGraphicsExtension.html">PJAGraphicsExtension</a></tt></td>
+      <td><tt>getColorRGB ()</tt></td>
+    </tr>
+    <tr valign="top">
+      <td><tt>Graphics</tt></td>
+      <td><tt>setColor (Color color)</tt></td>
+      <td><tt><a href="doc/com/eteks/awt/PJAGraphicsExtension.html">PJAGraphicsExtension</a></tt></td>
+      <td><tt>setColor (int&nbsp;red, int&nbsp;green, int&nbsp;blue)</tt></td>
+    </tr>
+    <tr valign="top">
+      <td><tt>Graphics</tt></td>
+      <td><tt>setXORMode (Color color)</tt></td>
+      <td><tt><a href="doc/com/eteks/awt/PJAGraphicsExtension.html">PJAGraphicsExtension</a></tt></td>
+      <td><tt>setXORMode (int&nbsp;red, int&nbsp;green, int&nbsp;blue)</tt></td>
+    </tr>
+    </table>
+    <p><tt>PJAGraphicsManager</tt> can be instantiated by a <tt>PJAGraphicsManager.getDefaultGraphicsManager
+        ()</tt>
+      call.<tt><br>
+     PJAGraphicsExtension</tt> is implemented by <tt>PJAGraphics</tt> used to
+     draw in <tt>PJAImage</tt> instances. This means you can cast the <tt>Graphics</tt> 
+    instance returned by <tt>new PJAImage (width, height).getGraphics ()</tt> to <tt>PJAGraphicsExtension</tt>.</p>
+    <p>As <tt>com.eteks.awt.PJAImage</tt> doesn't implement Java2D, this solution implies that your program doesn't use Java2D and <tt>Graphics2D</tt> capabilities.<br>
+    <i>.pjaf</i> font files will be used to draw strings.</p>
+  </blockquote>
+  <p><i>Why the methods <tt>show ()</tt> or <tt>setVisible ()</tt> of the class <tt>java.awt.Component</tt> throws <tt>ClassCastException</tt> with JDK &gt;= 
+  1.3 ?</i></p>
+  <blockquote> 
+    <p>These methods use the class <tt>sun.awt.GlobalCursorManager</tt> which supposes that the AWT toolkit returned by the method <tt>getDefaultToolkit ()</tt> 
+     of the class <tt>java.awt.Toolkit</tt> inherits from <tt>sun.awt.SunToolkit</tt> ! As <tt>com.eteks.awt.PJAToolkit</tt> inherits directly from <tt>java.awt.Toolkit</tt>, 
+     it throws a <tt>ClassCastException</tt> exception.<br>
+     Using <tt>addNotify ()</tt> on an instance of <tt>java.awt.Frame</tt> instead of these methods is enough to enable the creation of off-screen images 
+     with the <tt>createImage ()</tt> method of <tt>java.awt.Frame</tt> class, and avoids to wonder where will appear such a frame once the method <tt>show 
+    ()</tt> is executed.</p>
+  </blockquote>
+  <p><i>What fonts can I use to draw strings with PJA Toolkit ?</i></p>
+  <blockquote> 
+    <p>With JDK &gt;= 1.2, True Type fonts are used.<br>
+     With JDK &lt;= 1.1 or if <tt>com.eteks.awt.nojava2d</tt> system property is equal to <tt>true </tt>with JDK &gt;= 1.2, <i>.pjaf</i> font files are used. 
+    You can build these files from existing fonts with <i><a href="doc/com/eteks/tools/fontcapture/PJAFontCapture.html">PJAFontCapture</a></i> utility.</p>
+  </blockquote>
+  <p><i>What are these .pjaf files for ?</i></p>
+  <blockquote> 
+    <p>With the default toolkit of JDK &lt;= 1.1, strings are drawn using native
+      functions and fonts of the platform where the JVM runs (UNIX, Windows,...).
+       To be able to draw strings with only pure Java, PJA Toolkit needs some
+      font information. Instead of implementing a decoder for X format or True
+      Type 
+     font, it was decided to retrieve fonts drawing information from a new format
+      stored in files with the <i>.pjaf</i> extension. These portable files store
+       the bitmap drawing of each character of a font. <i>PJAFontCapture</i> utility
+       allows to capture native fonts and save them in <i>.pjaf</i> files.<br>
+    As Java2D includes its own decoder for True Type Font files, <i>.pjaf</i> files are useless with JDK &gt;= 1.2. Use instead existing True Type Font files.</p>
+  </blockquote>
+  <p><i>Why PJAFontCapture (or <tt>java com.eteks.tools.fontcapture.PJAFontCapture</tt>) can't work ?</i></p>
+  <blockquote> 
+    <p><i><a href="doc/com/eteks/tools/fontcapture/PJAFontCapture.html">PJAFontCapture</a></i> captures native fonts using <i>default</i> toolkit of the Java 
+     Virtual Machine. You can't run it on a UNIX machine with no Display available.<br>
+     If you need <i>.pjaf</i> fonts on a UNIX machine with no Display, launch <i>PJAFontCapture</i> on a machine where <i>default</i> toolkit can run (Windows, 
+    MacOS, UNIX with X11 Display). Then, ftp (in binary mode) or copy the <i>.pjaf</i> files to the UNIX machine.</p>
+  </blockquote>
+  <p><i>How can I save my images ?</i></p>
+  <blockquote> 
+    <p>Off-screen images computed by PJA Toolkit and more generally any Java
+      images can be saved with encoders that generate images files or streams
+      at different
+       formats. The encoding operation can be programmed easily in a few lines.
+      Please read the <tt>ToolkitDemo.java</tt> file for an example using <a href="http://www.acme.com/java/">ACME</a>'s
+       GIF encoder.<br>
+    Here are 3 small and free encoders that were successfully tested with PJA
+    Toolkit (with little modifications to <tt>ToolkitDemo.java</tt>) :</p>
+    <table border="1" cellpadding="3">
+    <tr align="center"> 
+    <td><b>Encoder<br>
+    format</b></td>
+    <td align="center"><b>JDK version<br>
+    supported</b></td>
+    <td><b>Link</b></td>
+    </tr>
+    <tr> 
+    <td align="center">GIF</td>
+    <td align="center">1.1</td>
+    <td><a href="http://www.acme.com/java/">http://www.acme.com/java/<br>
+    </a>The modified class <tt>Acme.JPM.Encoders.GifEncoder</tt> provided with
+    PJA Toolkit distribution supports also the JDK 1.0</td>
+    </tr>
+    <tr> 
+    <td align="center"> JPEG</td>
+    <td align="center">1.1</td>
+    <td><a href="http://www.obrador.com/essentialjpeg/">http://www.obrador.com/essentialjpeg/</a></td>
+    </tr>
+    <tr> 
+    <td align="center">PNG</td>
+    <td align="center">1.1</td>
+    <td><a href="http://catcode.com/pngencoder/">http://catcode.com/pngencoder/</a></td>
+    </tr>
+    </table>
+    <p>Sun Microsystems provides also the 2 following libraries that include decoders/encoders :</p>
+    <ul>
+     <li> <a href="http://java.sun.com/products/jimi/">JIMI</a>, running under JDK version &gt;= 1.1, supports the following formats : GIF (decoder only), 
+      JPEG, TIFF, PNG, PICT, Photoshop, BMP, Targa, ICO, CUR, Sunraster, XBM, XPM and PCX.</li>
+     <li><a href="http://java.sun.com/products/java-media/jai/">JAI</a> (Java Advanced Imaging), running under JDK version &gt;= 1.2, supports the following 
+      format : BMP, GIF (decoder only), FlashPix (decoder only), JPEG, PNG, PNM and TIFF.</li>
+    </ul>
+    <p>For your information, the JDK version &gt;= 1.2 provides the class <tt>com.sun.image.codec.jpeg.JPEGImageEncoder</tt> to encode images that are instances 
+    of the class <tt>java.awt.image.BufferedImage</tt>, in JPEG format.</p>
+  </blockquote>
+  <p><i>Drawing with PJA Toolkit is too slow. How can I improve performances ?</i></p>
+  <blockquote> 
+    <p>If you use PJA Toolkit with a JDK &gt;= 1.2, most AWT methods are implemented
+      by existing classes of the Java standard library, except the methods  that
+      read image files. As a lot of these methods are implemented in C librairies
+      by Sun, it's difficult to expect a speed improvement in the future.<br>
+     PJA Toolkit drawing methods are used if JDK &lt;= 1.1, if the <tt>com.eteks.awt.nojava2d</tt> system
+     property is set to <tt>true</tt> or if you use directly 
+     <tt><a href="doc/com/eteks/awt/PJAImage.html">com.eteks.awt.PJAImage</a></tt> and <tt><a href="doc/com/eteks/awt/PJAGraphics.html">com.eteks.awt.PJAGraphics</a></tt> 
+     classes. In this case, PJA Toolkit is slower than default toolkit because <tt><a href="doc/com/eteks/awt/PJAGraphics.html">com.eteks.awt.PJAGraphics</a></tt> 
+     drawing methods were implemented with classical drawing algorithms and could
+     be optimized. That's one of the reasons why PJA Toolkit is free : if you
+     know any algorithm that could improve PJA Toolkit performance, let us know
+     so we could implement
+     it and let other PJA Toolkit users share this improvement. <br>
+    In all cases, check if your JIT (Just In Time) or HotSpot compiler is on. </p>
+  </blockquote>
+  <p><i><a name="FAQPureJava"></a>Is PJA Toolkit 100% Pure Java ?</i></p>
+  <blockquote> 
+    <p>PJA Toolkit isn't 100% Pure Java according to Sun <i>JavaPureCheck</i> tool test.<br>
+     It lists the two following errors because PJA Toolkit uses <tt>sun.awt.image.ByteArrayImageSource</tt> and <tt>sun.java2d.SunGraphicsEnvironment</tt> JDK internal 
+    classes :</p>
+  </blockquote>
+  <ul>
+    <li><tt>sun.awt.image.ByteArrayImageSource</tt> class is used in the method <tt>createImage (byte [] imagedata, int imageoffset, int imagelength)</tt> 
+    of <tt>com.eteks.awt.PJAGraphicsManager</tt> class, and is the same implementation as <tt>sun.awt.SunToolkit</tt>.</li>
+    <li><tt>sun.java2d.SunGraphicsEnvironment</tt> is the super class of <tt>com.eteks.java2d.PJAGraphicsEnvironment. </tt>Its use can't be avoided because 
+     the class <tt>java.awt.Font</tt> casts the default graphics environment returned by the method <tt>getLocalGraphicsEnvironment ()</tt> of <tt>java.awt.GraphicsEnvironment</tt> 
+     to <tt>sun.java2d.SunGraphicsEnvironment</tt> !<br>
+    This second reason avoids PJA Toolkit to ever succeed at <i>JavaPureCheck</i> tool test.</li>
+  </ul>
+  <blockquote> 
+    <p>&nbsp;</p>
+  </blockquote>
+  <h3></h3>
+</blockquote>
+<H3><A NAME="History"></A>History</H3>
+<blockquote> 
+ <p>Version 2.5 05/25/2004</p>
+ <ul>
+  <li>Added <tt> createFontProperties()</tt> method to&nbsp; <tt><a href="doc/com/eteks/java2d/PJAGraphicsEnvironment.html">com.eteks.java2d.PJAGraphicsEnvironment</a></tt> to
+    enable PJA Toolkit to run with JDK 1.4.1 and JDK 1.4.2.</li>
+  <li>Commented out all PJA Toolkit methods required for JDK 1.4&nbsp;: PJA Toolkit
+    distribution build requires now a JDK 1.4 compiler.</li>
+  <li>Compatibility with JDK 1.1&nbsp;: Modified internal code of <tt>com.eteks.awt.PJAGraphicsManager</tt>    and <tt>com.eteks.awt.image.GIFDecoder</tt> classes
+    to be able to compile with Sun JDK 1.1 compiler. PJA Toolkit classes in <tt>pja.jar</tt> and <tt>pjatools.jar</tt>    of
+    PJA Toolkit distribution are compiled with Sun JDK 1.1 because the <tt>-target&nbsp;1.1</tt> option
+    of JDK 1.4 doesn't actually create classes compatible with JDK 1.1. To
+    be able to compile PJA Toolkit classes that use 1.4 classes, fake missing
+    1.4 classes were used but these classes are not distributed with PJA Toolkit.
+    <b>Don't</b> <b>rebuild</b> <tt>pja.jar</tt> and <tt>pjatools.jar</tt> archives
+   if you want to use PJA Toolkit with JDK <b>1.0</b> or JDK <b>1.1</b>.</li>
+  <li>Added applications for MacOS X in <tt>bin</tt> directory.</li>
+  <li>Changed information in the <a href="#FAQ">FAQ</a>.</li>
+  </ul>
+ <p>Version 2.4 03/14/2002</p>
+ <ul>
+   <li><tt>getImage ()</tt> methods of <tt>com.eteks.awt.PJAGraphicsManager</tt> : <tt>InputStream</tt> not
+     immediately closed once GIF images were read. </li>
+   <li>Added a contructor in <tt><a href="doc/com/eteks/awt/image/GIFDecoder.html">com.eteks.awt.image.GIFDecoder</a></tt> to
+     be able to chose the close of the input stream once the image is read.</li>
+   <li><tt>createImage (byte[] imagedata, int imageoffset, int imagelength)</tt> method
+     of <tt>com.eteks.awt.PJAGraphicsManager</tt> bug : zero length arrays shouldn't
+     throw exceptions.</li>
+   <li>Added methods to <tt>com.eteks.awt.PJAComponentPeer</tt>, <tt>com.eteks.awt.PJAFramePeer</tt> and <tt>com.eteks.java2d.PJAGraphicsConfiguration</tt> to
+     enable PJA Toolkit to run with JDK 1.4 (some useless methods were commented
+     to be able to compile PJA Toolkit with 1.2 <tt>rt.jar</tt> library).</li>
+   <li>Added information in the <a href="#FAQ">FAQ</a>.</li>
+ </ul>
+ <p></p>
+ <p>Version 2.3.1 07/05/2001</p>
+ <ul>
+  <li><tt>copyArea ()</tt> method of <tt>com.eteks.awt.PJAGraphics</tt> bug : wrong method call to get the height of the image (thanks to Dean Brettle).</li>
+  <li>No use of character encoding in <tt>writeString ()</tt> method of <tt>Acme.JPM.Encoders.GifEncoderNoCM</tt>, so headers of GIF images are correctly 
+   generated under OS/390. Note that users of <tt>Acme.JPM.Encoders.GifEncoder</tt> may force the correct character encoding with the <tt>-Dfile.encoding=ISO8859_1</tt> 
+   <i>java</i> option that sets the <tt>file.encoding</tt> system property.</li>
+  <li>Changed <tt>-Duser.home=.<b> </b></tt>to <tt>-Duser.home=..</tt> in <tt>PJAToolkitDemo1.2.sh</tt>. </li>
+  <li>Added information in the <a href="#FAQ">FAQ</a> about <tt>rtgraphics.jar</tt> patch.</li>
+ </ul>
+ <p></p>
+ <p>Version 2.3 03/23/2001</p>
+ <ul>
+  <li><tt>getImage (File filename)</tt> method of <tt>com.eteks.awt.PJAToolkit</tt> and <tt>com.eteks.awt.PJAGraphicsManager</tt> tries to find the image 
+   <tt>filename</tt> in a path relative to <tt>user.dir</tt> system property as before, and then if image isn't found with that path it tries to find <tt>filename</tt> 
+   with the path returned by the method <tt>getAbsolutePath ()</tt> of the class <tt>java.io.File</tt>.</li>
+  <li>Java2D is turned off if JVM version returned by the system property <tt>java.version</tt> returns something that can't be parse in the form <tt>x.y.z</tt>, 
+   where <tt>x</tt>, <tt>y</tt> and <tt>z</tt> are numbers.</li>
+  <li>PJA Toolkit fonts management and <tt>drawString ()</tt> method of <tt>com.eteks.awt.PJAGraphics</tt> optimized : drawing strings run up to 4 times as fast 
+   (thanks to Fernando Echeverria).</li>
+  <li>Inlined code <tt>com.eteks.awt.PJAGraphics</tt> for optimization (thanks again to Fernando Echeverria).</li>
+  <li>Added support for 8 bit color images using <tt>java.awt.image.IndexColorModel</tt> in <tt>com.eteks.awt.Image</tt> and <tt>com.eteks.awt.PJAGraphics</tt> 
+   classes : All images created with PJA Toolkit can use a 8 bit/pixel buffer
+     with an indexed color model if the class name given by the system property 
+   <tt>com.eteks.awt.colormodel</tt> inherits from <tt>java.awt.image.IndexColorModel</tt>.<br>
+   The new <tt><a href="doc/com/eteks/awt/image/Web216ColorModel.html">com.eteks.awt.image.Web216ColorModel</a></tt> class can be used as an indexed color 
+   model for that purpose (thanks again to Fernando Echeverria).</li>
+  <li>Added information in the <a href="#FAQ">FAQ</a>.</li>
+ </ul>
+ <p>Version 2.2 11/02/2000</p>
+ <ul>
+  <li>Changed the condition that detects GIF transparency in the class <tt>com.eteks.awt.image.GIFDecoder</tt>.</li>
+  <li><tt>readCode ()</tt> method of <tt>com.eteks.awt.image.GIFDecoder</tt> bug : fixed raster over-run errors (thanks to Alan Dix).</li>
+  <li> Better GIF detection from content type in <tt>com.eteks.awt.PJAGraphicsManager</tt> (thanks to Fernando Echeverria). </li>
+  <li>Added minimum support for <tt>EventQueue</tt> in <tt>com.eteks.awt.PJAToolkit</tt>.</li>
+  <li><tt>getClipBounds ()</tt> method of <tt>com.eteks.awt.PJAGraphics</tt> bug : returns a correct <tt>Rectangle</tt> instance.</li>
+  <li> <tt>create ()</tt> method of <tt>com.eteks.awt.PJAGraphics</tt> bug : changed <tt>com.eteks.awt.PJAGraphics</tt> constructors.</li>
+  <li><tt>translate ()</tt> method of <tt>com.eteks.awt.PJAGraphics</tt> bug : changed to enable the cumulative effect of translations after multiple call 
+   to <tt>translate ()</tt>.</li>
+  <li>Clipping bugs in <tt>com.eteks.awt.PJAGraphics</tt>.</li>
+ </ul>
+ <p></p>
+ <p>Version 2.1 07/30/2000</p>
+ <ul>
+  <li>PJA Toolkit library is available under GNU General Public License from
+    this version.</li>
+  <li>PJA Toolkit is now supplied with a <tt>font.properties</tt> file using the Lucida True Type fonts provided with JDK 1.2. The described properties use a font 
+   format that works with <tt>com.eteks.java2d.PJAGraphicsEnvironment</tt> class. It uses the same font format as its super class <tt>sun.java2d.SunGraphicsEnvironment</tt> 
+   and as Windows implementation.<br>
+   This file is required with JDK version greater or equal to 1.2 when using <tt>com.eteks.awt.PJAToolkit</tt> and <tt>com.eteks.java2d.PJAGraphicsEnvironment 
+   </tt>classes on a UNIX platform. It must be in a <tt>lib</tt> sub directory of the directory defined by <tt>$HOME</tt> or <tt>user.home</tt> system property.<br>
+   Check if the path you set in <tt>java.awt.fonts</tt> system property contains the directory <tt>/.../jdk.../jre/lib/fonts</tt> where Lucida True Type 
+   fonts files are by default.<br>
+   If you need to change <tt>font.properties</tt> yourself, have a look at the document <a href="http://www.javasoft.com/products/jdk/1.2/docs/guide/internat/fontprop.html">Adding 
+   Fonts to the Java Runtime</a>.</li>
+  <li>Created the <tt><a href="doc/com/eteks/awt/servlet/PJAServlet.html">com.eteks.awt.servlet.PJAServlet</a></tt> class extending <tt>javax.servlet.http.HttpServlet</tt>.<br>
+   This class should be used by developers as a super class to ensure their graphics servlets will work with all servlet servers in almost any case.</li>
+  <li>Created the <tt><a href="doc/com/eteks/awt/servlet/PJARedirectServlet.html">com.eteks.awt.servlet.PJARedirectServlet</a></tt> class extending <tt>com.eteks.awt.servlet.PJAServlet</tt>.<br>
+   This class should be used by users of graphics existing servlets to provide an AWT toolkit to their servlet server if they have some problems using the 
+   default JVM one. </li>
+  <li>Added a <a href="#FAQ">FAQ</a> list.</li>
+  <li>Organized differently PJA Toolkit files.</li>
+  <li>Splited <tt>pja.jar</tt> in two files : <tt>pja.jar</tt> and <tt>pjatools.jar</tt>. 
+   <ul>
+    <li><tt>pja.jar</tt> contains the core PJA Toolkit classes (packages <tt>com.eteks.awt</tt>, <tt>com.eteks.awt.image</tt>, <tt>com.eteks.awt.servlet</tt> and 
+     <tt>com.eteks.java2d</tt>).<br>
+     This jar file contains all the classes needed to replace default JVM toolkit.</li>
+    <li><tt>pjatools.jar</tt> contains some utility classes, the classes used for demo and <i>PJAFontCapture</i> utility class.</li>
+   </ul>
+  </li>
+ </ul>
+ <p>Version 2.0 06/23/2000</p>
+ <ul>
+  <li><a name="Java2D"></a>After a close study of the JDK 1.2.2 sources available at Sun, support of Java2D in Pure Java AWT images was added for JVM version 
+   greater or equal to 1.2 (using <tt>java.awt.image.BufferedImage</tt> class or <tt>java.awt.Component</tt> class <tt>createImage ()</tt> method). It may 
+   interest people who want to generate images with Java2D features even if they don't have access to any X11 Display on UNIX machines.<br>
+   This study was done respecting this process :</li>
+ </ul>
+ <blockquote> 
+  <ul>
+   <li>In the <tt>import</tt> instructions and in the code of all the classes of <tt>java.awt</tt> package and sub packages, search the non standard Java 
+    classes they need. Most of these classes belongs to <tt>sun.dc</tt>, <tt>sun.awt</tt>, <tt>sun.java2d</tt> and <tt>sun.security.action</tt> packages 
+    and sub packages.<br>
+    Untill Java 1.1, all <tt>java.awt</tt> classes imported classes only from standard Java packages (and Sun shouldn't have changed this paradigm !).</li>
+   <li>In the <tt>import</tt> instructions of all the classes of the latter packages, search what other packages are needed. A few ones use conversion classes 
+    of <tt>sun.io </tt>package, <tt>sun.security.action.GetProperty</tt> class, <tt>sun.security.action.LoadLibraryAction</tt> class and <tt>sun.misc</tt> 
+    classes for weak references (nothing that seems annoying).</li>
+   <li>In the classes of <tt>java.awt</tt>, <tt>sun.dc</tt>, <tt>sun.awt</tt> and <tt>sun.java2d</tt> packages and sub packages, search <tt>abstract</tt> 
+    classes and classes with <tt>native</tt> methods (event managing classes
+    were a little neglected because they aren't usefull in PJA Toolkit).</li>
+  </ul>
+  <p>The result of this research told roughly :</p>
+  <ul>
+   <li>Which <tt>abstract</tt> classes are extended in platform dependent classes or not (classes of <tt>sun.awt.motif</tt> and <tt>sun.awt.windows</tt> 
+    packages).</li>
+   <li>Which <tt>native</tt> methods are implemented using common portable C code (sources found in <tt>share/native/sun/awt</tt>, <tt>share/native/sun/dc</tt> 
+    and <tt>share/native/sun/java2d</tt> directories) or using platform dependent code (using Windows GDI or an X11 display for example).</li>
+  </ul>
+  <p>All the <tt>native</tt> classes of <tt>java.awt</tt> package and sub packages are named <tt>initIDs ()</tt>. The implementation of <tt>initIDs ()</tt> 
+   is only used by native objects to initialize their <tt>struct</tt> data and don't use any X11 Display but requires the awt library to be loaded.<br>
+   Almost all the methods of the class <tt>java.awt.image.BufferedImage</tt> used to render Java2D are implemented in common Java classes or C programs, 
+   except a few ones that are corrected by the following classes.</p>
+  <p> The following new classes belong to the package <tt>com.eteks.java2d</tt>. The classes of <tt>com.eteks.awt</tt> package don't require them if you 
+   wish to work with JDK 1.1 or if a DISPLAY is available.</p>
+ </blockquote>
+ <ul>
+  <li>Created the <tt><a href="doc/com/eteks/java2d/PJAGraphicsManager2D.html">com.eteks.java2d.PJAGraphicsManager2D</a></tt> class extending <tt>com.eteks.awt.PJAGraphicsManager</tt>.</li>
+  <li>Created the <tt><a href="doc/com/eteks/java2d/PJAGraphicsEnvironment.html">com.eteks.java2d.PJAGraphicsEnvironment</a></tt> class extending <tt>sun.java2d.SunGraphicsEnvironment</tt>. 
+   <ul>
+    <li><tt>java.awt.graphicsenv</tt> system property have to be set to <tt>com.eteks.java2d.PJAGraphicsEnvironment</tt> to permit the change of <tt>java.awt.GraphicsEnvironment</tt> 
+     implementation. </li>
+   </ul>
+  </li>
+  <ul>
+   <li><tt>java.awt.fonts</tt> system property have to be set to the path where True Type fonts files will be loaded from.<br>
+    This path can be equal to : 
+    <ul>
+     <li><code>WinDir\Font</code> directory on Windows</li>
+     <li><code>/usr/openwin/lib/X11/fonts/Type1:/usr/openwin/lib/X11/fonts/TrueType</code> directories on Solaris</li>
+     <li><code>($JAVAHOME)/lib/fonts</code></li>
+     <li>Any directory list containing True Type fonts.</li>
+    </ul>
+    <p>When drawing in images of class <tt>java.awt.image.BufferedImage</tt>, <i>.pjaf</i> font files are not used. </p>
+   </li>
+  </ul>
+  <li>Created the <tt><a href="doc/com/eteks/java2d/PJAGraphicsDevice.html">com.eteks.java2d.PJAGraphicsDevice</a></tt> class extending <tt>java.awt.GraphicsDevice</tt>. 
+   <br>
+  </li>
+  <li>Created the <tt><a href="doc/com/eteks/java2d/PJAGraphicsConfiguration.html">com.eteks.java2d.PJAGraphicsConfiguration</a></tt> class extending <tt>java.awt.GraphicsConfiguration</tt>.</li>
+  <li>Created the <tt><a href="doc/com/eteks/java2d/PJABufferedImage.html">com.eteks.java2d.PJABufferedImage</a></tt> class extending <tt>java.awt.image.BufferedImage</tt>. 
+   It has the same constructors as <tt>BufferedImage</tt><!--and a  constructor with a parameter of class <tt>java.awt.image.ImageProducer</tt> as the class <tt>PJAImage</tt>,--> 
+   and overrides the method <tt>public Graphics2D createGraphics ();</tt> to return the <tt>Graphics</tt> instance returned by the method <tt>createGraphics 
+   ()</tt> of <tt>PJAGraphicsEnvironment</tt>.</li>
+  <li>Changed the methods <tt>createImage (int width, int height)</tt> and <tt>createImage (ImageProducer producer)</tt> of the class <tt>com.eteks.awt.PJAGraphicsManager</tt> 
+   to return a <tt>PJABufferedImage</tt> instance if JVM version is greater or equal to 1.2.</li>
+  <li>For security reasons or for a need of homogeneous image result whatever JDK is used, the boolean system property <tt>com.eteks.awt.nojava2d</tt> can 
+   be set to <tt>true</tt> to disallow Java2D in PJA Toolkit.<br>
+   In that case, <tt>PJAImage</tt> will be used as images class along with <tt>PJAGraphics</tt> class and <i>.pjaf</i> fonts.<br>
+  </li>
+ </ul>
+ <p>Version 1.2 06/08/2000</p>
+ <ul>
+  <li>Added the method <tt>public int charWidth (char ch)</tt> in the class <tt>com.eteks.awt.PJAFontMetrics</tt> (it overrides <tt>java.awt.FontMetrics</tt> 
+   to return the width of a character).</li>
+  <li><tt>com.eteks.awt.PJAImage</tt> bug : drawing images constructed by a <tt>prepareImage ()</tt> call could throw exceptions.</li>
+  <li>Changed <tt> com.eteks.awt.PJAComponent</tt> default background color : new images created by <tt>createImage (int width, int height)</tt> are now 
+   white by default (when <tt>setBackground ()</tt> is not set on the component).</li>
+  <li>Created the <tt>com.eteks.awt.PJAMenuComponentPeer</tt> class for internal needs.</li>
+  <li> Created the <tt><a href="doc/com/eteks/awt/image/GIFDecoder.html">com.eteks.awt.image.GIFDecoder</a></tt> class : it is now the default GIF files 
+   loader (it avoids the exception <tt>java.lang.UnsatisfiedLinkError: parseImage</tt> with JDK 1.1).<br>
+   If you need a GIF loader, it can be used alone without <tt>com.eteks.awt</tt> package (it implements the interface <tt>java.awt.image.ImageProducer</tt>).</li>
+ </ul>
+ <p>Version 1.1 05/30/2000 </p>
+ <ul>
+  <li> Version 1.0 <i>.pjaf</i> font files are not compatible with PJA Toolkit
+    version 1.1.<br>
+   Please use font capture utility to produce PJA Toolkit 1.1 new font files.
+   For security reasons and wider platform compliance, it was impossible to support
+   PJA Toolkit 1.0 fonts in PJA Toolkit 1.1.</li>
+  <li> Version 1.0 targeted the replacement of Java standard AWT Toolkit by PJA Toolkit when standard Toolkit couldn't be instantiated.<br>
+   Version 1.1 aims at enabling the creation of an image and drawing into it with <i>all</i> the <tt>java.awt.Graphics</tt> methods, even if no Toolkit 
+   can be instantiated by <tt>getDefaultToolkit ()</tt> <tt>static</tt> method of the class <tt>java.awt.Toolkit</tt>, for security or other reason (JServ 
+   1.1 refuses to load the class <tt>com.eteks.awt.PJAToolkit</tt> because it's not in its default classpath).<br>
+   Version 1.0 allowed to create an instance of <tt>com.eteks.awt.PJAImage</tt> but using <tt>java.awt.Graphics</tt> <tt>drawString ()</tt> threw an <tt>AWTError</tt> 
+   exception, when no Toolkit was available. This is because the class <tt>java.awt.Font</tt> <i>requires</i> the instance of a Toolkit to be instantiated 
+   in Java 1.1 and without any Toolkit you can't get any font to draw strings... <br>
+   <tt>com.eteks.awt.PJAGraphics</tt> was changed in version 1.1 and now has a default internal font created from a <i>.pjaf</i> font file. This default 
+   font is used in <tt>drawString ()</tt> method to draw text.<br>
+   On the other hand, in Java 1.1, the creation of a <tt>java.awt.Font</tt> object is still impossible without a Toolkit instance, which prevents from changing 
+   the default font to an other one, with <tt>Graphics</tt> <tt>setFont ()</tt> method. To be able although to modify the font used in <tt>drawString ()</tt>, 
+   the <i>non standard</i> <tt>setFont (String fontName, int fontStyle, int fontSize)</tt> method of the new interface <tt>com.eteks.awt.PJAGraphicsExtension 
+   </tt>was implemented in <tt>PJAGraphics</tt> class (see also <tt><a href="doc/com/eteks/awt/PJAToolkit.html">com.eteks.awt.PJAToolkit</a></tt> class).</li>
+  <li>Following the same idea, version 1.0 was modified to enable the use of
+    PJA Toolkit even if the awt library can't be loaded for security or other
+    reasons. If awt isn't available, a lot of AWT classes (in particular, <code>java.awt.Color</code>, <code>java.awt.Rectangle</code>, <code>java.awt.Font</code>, 
+   <code>java.awt.FontMetrics</code>, <code>java.awt.image.ColorModel</code>) can't be loaded preventing some graphics operations. Changing the current 
+   color and querying font metrics is although possible when awt library isn't available thanks to <tt><a href="doc/com/eteks/awt/PJAGraphicsExtension.html">com.eteks.awt.PJAGraphicsExtension</a></tt> 
+   new methods implemented in <tt>PJAGraphics</tt> class (see the new <i>PJADemo.java</i> example to see what it may change in your Java code).<br>
+  </li>
+  <li>Changed <tt>com.eteks.servlet.TeksSurveyPie</tt> to improve error catching and provide a good model for <tt>Image</tt> creation.<br>
+  </li>
+  <li>Changed <tt>createImage (int width, int height)</tt> method in the class<tt> com.eteks.awt.PJAComponent</tt> to fill the image with component background 
+   color.<br>
+  </li>
+  <li>Improved<tt> </tt>Javadoc documention of all classes.<br>
+  </li>
+  <li>Cleaned <tt>import</tt> instructions in PJA Toolkit classes to enhance
+    maintenance ; there are no more <tt>import ...*;</tt> and class prefixed with its package 
+   (except when a class name is in a <tt>String</tt>, and mustn't be loaded) : all the classes of foreign packages used in a class have an <tt>import</tt>.</li>
+  <li>Created the <tt><a href="doc/com/eteks/awt/PJAGraphicsManager.html">com.eteks.awt.PJAGraphicsManager</a></tt> class into which the font loading methods 
+   of the class <tt>com.eteks.awt.PJAToolkit</tt> were copied.</li>
+  <li>Created the <tt><a href="doc/com/eteks/awt/PJAFontData.html">com.eteks.awt.PJAFontData</a></tt> class into which all the font data management code 
+   of the class <tt>com.eteks.awt.PJAFontMetrics</tt> was copied.</li>
+  <li> <tt>com.eteks.awt.PJAGraphics</tt> class optimization : this class doesn't use anymore floating point Java type (<tt>float</tt> or <tt>double</tt>). 
+   Thanks to this change, floating point is useless in the package <tt>com.eteks.awt</tt>,
+   enabling PJA Toolkit to be used in a J2ME environment.<i></i></li>
+  <li> <tt>com.eteks.awt.PJAGraphics</tt> class change : this class doesn't use anymore the classes <tt>java.awt.Color</tt>, <tt>java.awt.Rectangle</tt>, 
+   <tt>java.awt.FontMetrics</tt> or <tt>java.awt.Polygon</tt> for internal use.</li>
+  <li><tt>com.eteks.awt.PJAGraphics</tt> bug : Large ellipse weren't drawn correctly, ellipse generator uses <tt>long</tt> now.</li>
+  <li><tt>com.eteks.awt.PJAGraphics</tt> <tt>drawString (AttributedCharacterIterator iterator, int x, int y)</tt> method implemented.</li>
+  <li><tt>com.eteks.awt.PJAImage</tt> <tt>flush ()</tt> method correctly implemented.</li>
+  <li>PJA Toolkit 1.1 now supports JDK 1.0.2.</li>
+  <li>Changed demo programs.</li>
+  <li>To reduce the size of the package <tt>com.eteks.awt</tt>, the two next methods moved : 
+   <ul>
+    <li>The <tt>main ()</tt> method of the class <tt>com.eteks.awt.PJAFontPeer</tt> moved to the new class <tt>com.eteks.tools.fontcapture.PJAFontCapture</tt>.</li>
+    <li>The <tt>main ()</tt> demo method of the class <tt>com.eteks.awt.PJAToolkit</tt> moved to the new class <tt>PJAToolkitDemo</tt> (with no package).</li>
+   </ul>
+  </li>
+ </ul>
+ <p>Version 1.0 05/17/2000</p>
+ <blockquote> 
+  <p>First version. JDK 1.1 compliant. </p>
+ </blockquote>
+</blockquote>
+<h3><a name="Next"></a>What's next</h3>
+<blockquote> 
+  <p>Javadoc documentation should be clearer and more consistent. Meanwhile,
+    if you have problems using PJA Toolkit library, please read first the <a href="#FAQ">FAQ</a>.</p>
+  <p>Features that may be interesting to implement in PJA Toolkit :</p>
+  
+ <ul>
+  <li>Supporting Java2D in PJA Toolkit for JVM version 1.1 :<br>
+   It's a great amount of work but supporting anti-aliasing on current PJA Toolkit
+     would be already a first interesting step for most people... </li>
+  <li><tt>PJAToolkit</tt> <tt>getPrintJob ()</tt> method could be implemented as <tt>sun.awt.motif.MToolkit</tt> <tt>getPrintJob</tt> <tt>()</tt> method. 
+  </li>
+  <li>Stuff not implemented in <tt>PJAToolkit</tt> should throw <tt>java.awt.AWTError</tt>.</li>
+  <li>Keep track of all <tt>PJAGraphics</tt> calls, to be able to generate vector PNG files. </li>
+  <li>The method <tt>sync()</tt> of the class <tt>PJAToolkit</tt> should do something.<br>
+  </li>
+  <li> <tt>PJAFrame</tt> should be linked to <tt>JInternalFrame</tt> to looks like a frame and then allow to capture it.</li>
+ </ul>
+  
+ <p>If you have any suggestion about how PJA Toolkit should evolve, please send
+   them to <a href="mailto:info@eteks.com">info@eteks.com</a> or fill the <a href="http://www.eteks.com/pja/en/feedback.html">PJA
+   Toolkit feedback</a> form.<br>
+ </p>
+</blockquote>
+<H3><A NAME="Copyright"></A>Copyright and license</H3>
+
+<BLOCKQUOTE> 
+  
+ <P> Copyright &copy; 2000-2001 Emmanuel PUYBARET / eTeks <a href="mailto:info@eteks.com">info@eteks.com</a>. All Rights Reserved.</P>
+  <P>This program is free software; you can redistribute it and/or modify it under 
+    the terms of the GNU General Public License as published by the Free Software 
+    Foundation; either version 2 of the License, or (at your option) any later 
+    version.<br>
+    <br>
+    This program is distributed in the hope that it will be useful, but WITHOUT 
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+    FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.<br>
+    <br>
+  You should have received a <a href="COPYING.TXT">copy</a> of the GNU General Public License along with this program; if not, write to the Free Software 
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</P>
+  <P>Visit eTeks web site for up-to-date versions of PJA Toolkit and other Java
+    tools and tutorials : <a href="http://www.eteks.com/">http://www.eteks.com/</a></P>
+  <hr width="20%">
+  <p>Copyright &copy; 1996,1998 by Jef Poskanzer <a href="mailto:jef@acme.com">jef@acme.com</a>. 
+    All rights reserved. (for the use of <tt>Acme.JPM.Encoders.GifEncoder</tt> 
+    class)</p>
+  <p> Redistribution and use in source and binary forms, with or without modification, 
+    are permitted provided that the following conditions are met:</p>
+  <ol>
+    <li>Redistributions of source code must retain the above copyright notice, 
+      this list of conditions and the following disclaimer.</li>
+    <li>Redistributions in binary form must reproduce the above copyright notice, 
+      this list of conditions and the following disclaimer in the documentation 
+      and/or other materials provided with the distribution.</li>
+  </ol>
+  <p> THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY 
+    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+    IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
+    INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
+    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+    OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
+    OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+    ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.<br>
+    <br>
+    Visit the ACME Labs Java page for up-to-date versions of this and other fine 
+    Java utilities : <a href="http://www.acme.com/java/">http://www.acme.com/java/</a></p>
+  <p> </p>
+</BLOCKQUOTE>
+<P><CENTER>
+<HR>
+<BR>
+ <i>PJA Toolkit version 2.5<br>
+ Last update : </i>05/25/2004
+</CENTER><p></P>
+
+<P><CENTER>
+<HR>
+  <A HREF="http://www.eteks.com"><img src="images/logoeteks.gif" width="94" height="25" alt="eTeks" border="0"></A><FONT
+SIZE="-1"><BR>
+ &copy; 2000-2004 </FONT><FONT
+SIZE="-1"><A HREF="http://www.eteks.com">eTeks</A> - All
+ rights reserved</FONT> 
+</CENTER><p></P>
+</BODY>
+</HTML>
